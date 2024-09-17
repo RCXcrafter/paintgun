@@ -1,0 +1,23 @@
+{
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"render_type": "minecraft:translucent",
+	"textures": {
+		"particle": "squidgames:block/ink_splatter",
+		"ink": "squidgames:block/ink_splatter"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 0.1],
+			"faces": {
+				"north": {"uv": [5.33334, 0, 0, 5.33334], "texture": "#ink", "tintindex": 0},
+				"east": {"uv": [5.33334, 0, 5.23334, 5.33334], "texture": "#ink", "tintindex": 0},
+				"south": {"uv": [0, 0, 5.33334, 5.33334], "texture": "#ink", "tintindex": 0},
+				"west": {"uv": [0.1, 0, 0, 5.33334], "texture": "#ink", "tintindex": 0},
+				"up": {"uv": [0, 0, 5.33334, 0.1], "texture": "#ink", "tintindex": 0},
+				"down": {"uv": [0, 5.23337, 5.33334, 5.33337], "texture": "#ink", "tintindex": 0}
+			}
+		}
+	]
+}

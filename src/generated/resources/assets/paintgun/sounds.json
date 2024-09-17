@@ -1,0 +1,11 @@
+{
+  "item.gel.shoot": {
+    "sounds": [
+      "paintgun:bubble_1",
+      "paintgun:bubble_2",
+      "paintgun:bubble_3",
+      "paintgun:bubble_4"
+    ],
+    "subtitle": "subtitles.paintgun.item.gel.shoot"
+  }
+}

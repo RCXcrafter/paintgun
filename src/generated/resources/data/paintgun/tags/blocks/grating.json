@@ -1,0 +1,34 @@
+{
+  "values": [
+    "#forge:fences",
+    "#forge:fence_gates",
+    "#minecraft:leaves",
+    "#minecraft:candles",
+    "minecraft:iron_bars",
+    "minecraft:chain",
+    "minecraft:scaffolding",
+    "minecraft:mangrove_roots",
+    "minecraft:pointed_dripstone",
+    "minecraft:sea_pickle",
+    "minecraft:bamboo",
+    "minecraft:azalea",
+    "minecraft:flowering_azalea",
+    "minecraft:acacia_door",
+    "minecraft:oak_trapdoor",
+    "minecraft:iron_trapdoor",
+    "minecraft:jungle_trapdoor",
+    "minecraft:acacia_trapdoor",
+    "minecraft:warped_trapdoor",
+    "minecraft:crimson_trapdoor",
+    "minecraft:cherry_trapdoor",
+    "minecraft:mangrove_trapdoor",
+    "minecraft:small_amethyst_bud",
+    "minecraft:medium_amethyst_bud",
+    "minecraft:large_amethyst_bud",
+    "minecraft:amethyst_cluster",
+    {
+      "id": "#squidgames:grating",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "bottom": {
+    "parent": "paintgun:block/splatter_bottom",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  },
+  "bottom_left": {
+    "parent": "paintgun:block/splatter_bottom_left",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  },
+  "bottom_right": {
+    "parent": "paintgun:block/splatter_bottom_right",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  },
+  "center": {
+    "parent": "paintgun:block/splatter_center",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  },
+  "left": {
+    "parent": "paintgun:block/splatter_left",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  },
+  "loader": "paintgun:splatter",
+  "render_type": "minecraft:cutout",
+  "right": {
+    "parent": "paintgun:block/splatter_right",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  },
+  "top": {
+    "parent": "paintgun:block/splatter_top",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  },
+  "top_left": {
+    "parent": "paintgun:block/splatter_top_left",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  },
+  "top_right": {
+    "parent": "paintgun:block/splatter_top_right",
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "gel": "paintgun:block/propulsion_gel",
+      "particle": "paintgun:block/propulsion_gel_center"
+    }
+  }
+}

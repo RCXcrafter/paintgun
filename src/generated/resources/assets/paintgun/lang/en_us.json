@@ -1,0 +1,16 @@
+{
+  "block.paintgun.propulsion_gel_splatter": "Propulsion Gel",
+  "block.paintgun.repulsion_gel_splatter": "Repulsion Gel",
+  "effect.paintgun.propulsion": "Propulsion",
+  "effect.paintgun.repulsion": "Repulsion",
+  "entity.paintgun.gel_projectile": "Gel Projectile",
+  "fluid.paintgun.propulsion_gel": "Propulsion Gel",
+  "fluid.paintgun.repulsion_gel": "Repulsion Gel",
+  "fluid_type.paintgun.propulsion_gel": "Propulsion Gel",
+  "fluid_type.paintgun.repulsion_gel": "Repulsion Gel",
+  "item.paintgun.paint_gun": "Paint Gun",
+  "item.paintgun.propulsion_gel_bucket": "Propulsion Gel Bucket",
+  "item.paintgun.repulsion_gel_bucket": "Repulsion Gel Bucket",
+  "item_group.paintgun": "Paint Gun",
+  "subtitles.paintgun.item.gel.shoot": "Gel is shot"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "paintgun:block/splatter_right",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "gel": "paintgun:block/repulsion_gel",
+    "particle": "paintgun:block/repulsion_gel_center"
+  }
+}

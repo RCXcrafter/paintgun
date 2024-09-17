@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "G": {
+      "tag": "forge:glass/silica"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "L": {
+      "tag": "forge:gems/lapis"
+    },
+    "N": {
+      "tag": "forge:ingots/netherite"
+    },
+    "S": {
+      "tag": "forge:slimeballs"
+    }
+  },
+  "pattern": [
+    "IGI",
+    "LSB",
+    "NNN"
+  ],
+  "result": {
+    "item": "paintgun:paint_gun"
+  },
+  "show_notification": true
+}

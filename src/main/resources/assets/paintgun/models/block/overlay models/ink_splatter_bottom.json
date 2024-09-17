@@ -1,0 +1,36 @@
+{
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"render_type": "minecraft:translucent",
+	"textures": {
+		"particle": "squidgames:block/ink_splatter",
+		"ink": "squidgames:block/ink_splatter",
+		"overlay": "squidgames:block/ink_splatter_overlay"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 0.1],
+			"faces": {
+				"north": {"uv": [10.66667, 10.66663, 5.33333, 15.99997], "texture": "#ink", "tintindex": 0},
+				"east": {"uv": [10.66667, 10.66663, 10.56667, 15.99997], "texture": "#ink", "tintindex": 0},
+				"south": {"uv": [5.33333, 10.66663, 10.66667, 15.99997], "texture": "#ink", "tintindex": 0},
+				"west": {"uv": [5.43333, 10.66663, 5.33333, 15.99997], "texture": "#ink", "tintindex": 0},
+				"up": {"uv": [5.33333, 10.66663, 10.66667, 10.76663], "texture": "#ink", "tintindex": 0},
+				"down": {"uv": [5.33333, 15.9, 10.66667, 16], "texture": "#ink", "tintindex": 0}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 0.1],
+			"faces": {
+				"north": {"uv": [10.66667, 10.66663, 5.33333, 15.99997], "texture": "#overlay"},
+				"east": {"uv": [10.66667, 10.66663, 10.56667, 15.99997], "texture": "#overlay"},
+				"south": {"uv": [5.33333, 10.66663, 10.66667, 15.99997], "texture": "#overlay"},
+				"west": {"uv": [5.43333, 10.66663, 5.33333, 15.99997], "texture": "#overlay"},
+				"up": {"uv": [5.33333, 10.66663, 10.66667, 10.76663], "texture": "#overlay"},
+				"down": {"uv": [5.33333, 15.9, 10.66667, 16], "texture": "#overlay"}
+			}
+		}
+	]
+}
