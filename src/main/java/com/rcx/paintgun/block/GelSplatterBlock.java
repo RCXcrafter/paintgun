@@ -151,7 +151,7 @@ public class GelSplatterBlock extends MultifaceBlock {
 	}
 
 	public static boolean canAttach(BlockGetter pLevel, Direction pDirection, BlockPos pPos, BlockState pState) {
-		return !pState.propagatesSkylightDown(pLevel, pPos) && MultifaceBlock.canAttachTo(pLevel, pDirection, pPos, pState);
+		return !pState.is(PaintGunBlockTags.GEL_BLACKLIST) && MultifaceBlock.canAttachTo(pLevel, pDirection, pPos, pState);
 	}
 
 	@Override

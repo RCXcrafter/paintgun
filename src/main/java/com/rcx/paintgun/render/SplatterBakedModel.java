@@ -79,7 +79,7 @@ public class SplatterBakedModel implements BakedModel {
 					BlockState blockState = level.getBlockState(blockPos);
 					for (int d = 0; d < 6; d++) {
 						if (!blockState.is(PaintGunBlockTags.GRATING) && blockState.isFaceSturdy(level, blockPos, Direction.from3DDataValue(d))) {
-							if (blockState.propagatesSkylightDown(level, pos))
+							if (blockState.is(PaintGunBlockTags.GEL_BLACKLIST))
 								area[x][y][z][d] = BLOCKING;
 							else
 								area[x][y][z][d] = SOLID;
