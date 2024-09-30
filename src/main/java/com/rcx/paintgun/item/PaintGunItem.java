@@ -50,6 +50,9 @@ public class PaintGunItem extends Item {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+		if (!isSelected)
+			return;
+
 		boolean primaryFire = stack.getOrCreateTag().getBoolean(PRIMARY_FIRE);
 		boolean secondaryFire = stack.getOrCreateTag().getBoolean(SECONDARY_FIRE);
 		if (level.isClientSide()) {
