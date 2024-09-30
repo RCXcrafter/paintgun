@@ -50,31 +50,36 @@ public class PaintGunItem extends Item {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-		if (!isSelected)
-			return;
+		if (entity instanceof LivingEntity living) {
+			boolean offhandShot = slotId == 0 && living.getOffhandItem() == stack; //oh look a usecase for reference comparison
+			if (!isSelected && !offhandShot)
+				return;
 
-		boolean primaryFire = stack.getOrCreateTag().getBoolean(PRIMARY_FIRE);
-		boolean secondaryFire = stack.getOrCreateTag().getBoolean(SECONDARY_FIRE);
-		if (level.isClientSide()) {
-			Minecraft mc = Minecraft.getInstance();
-			boolean useDown = mc.options.keyUse.isDown();
-			boolean attackDown = mc.options.keyAttack.isDown();
-			if (primaryFire != useDown || secondaryFire != attackDown) {
-				PacketHandler.INSTANCE.sendToServer(new MessageGunFire(useDown, attackDown));
-			}
-		} else if (entity instanceof LivingEntity living) {
-			if (secondaryFire) {
-				this.shootGel(level, living, stack, secondaryFluid.FLUID.get());
-			} else if (primaryFire) {
-				this.shootGel(level, living, stack, primaryFluid.FLUID.get());
+			boolean primaryFire = stack.getOrCreateTag().getBoolean(PRIMARY_FIRE);
+			boolean secondaryFire = stack.getOrCreateTag().getBoolean(SECONDARY_FIRE);
+			if (level.isClientSide()) {
+				Minecraft mc = Minecraft.getInstance();
+				if (!mc.player.equals(entity))
+					return;
+				boolean useDown = mc.options.keyUse.isDown();
+				boolean attackDown = mc.options.keyAttack.isDown();
+				if (primaryFire != useDown || secondaryFire != attackDown) {
+					PacketHandler.INSTANCE.sendToServer(new MessageGunFire(useDown, attackDown));
+				}
+			} else {
+				if (secondaryFire) {
+					this.shootGel(level, living, stack, offhandShot, secondaryFluid.FLUID.get());
+				} else if (primaryFire) {
+					this.shootGel(level, living, stack, offhandShot, primaryFluid.FLUID.get());
+				}
 			}
 		}
 	}
 
-	public void shootGel(Level level, LivingEntity player, ItemStack stack, Fluid gel) {
+	public void shootGel(Level level, LivingEntity player, ItemStack stack, boolean offhand, Fluid gel) {
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), PaintGunSounds.GEL_SHOOT.get(), SoundSource.PLAYERS, 0.4F, 1.4F + level.getRandom().nextFloat() * 0.2F);
 		if (!level.isClientSide) {
-			double handmod = player.getUsedItemHand() == InteractionHand.MAIN_HAND ? 1.0 : -1.0;
+			double handmod = offhand ? -1.0 : 1.0;
 			handmod *= player.getMainArm() == HumanoidArm.RIGHT ? 1.0 : -1.0;
 			Vec3 look = player.getLookAngle().add(player.getUpVector(1.0f).scale(-0.2));
 			double posX = player.getX() + look.x + handmod * (player.getBbWidth() / 2.0) * Math.sin(Math.toRadians(-player.getYHeadRot() - 90));

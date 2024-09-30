@@ -23,7 +23,7 @@ public class PaintGunClientEvents {
 	}*/
 
 	public static void leftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-		if (event.getEntity().getMainHandItem().is(PaintGunItemTags.FLUID_GUN)) {
+		if (event.getEntity().getMainHandItem().is(PaintGunItemTags.FLUID_GUN) || event.getEntity().getOffhandItem().is(PaintGunItemTags.FLUID_GUN)) {
 			event.setCanceled(true);
 		}
 	}
