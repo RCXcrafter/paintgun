@@ -41,32 +41,34 @@ public class FluidCuboid {
 		}
 	}
 
-	/** Fluid start, scaled for block models */
-	private final Vector3f from;
-	/** Fluid end, scaled for block models */
-	private final Vector3f to;
+	/** Fluid vertices, scaled for block models */
+	protected final Vector3f[] vertices;
 	/** Block faces for the fluid */
-	private final Map<Direction, FluidFace> faces;
+	protected final Map<Direction, FluidFace> faces;
 
 	/** Cache for scaled from */
 	@Nullable
-	private Vector3f fromScaled;
-	/** Cache for scaled to */
-	@Nullable
-	private Vector3f toScaled;
+	protected Vector3f[] scaledVertices;
 
 	public FluidCuboid(Vector3f from, Vector3f to, Map<Direction,FluidFace> faces) {
-		this.from = from;
-		this.to = to;
+		this.vertices = new Vector3f[8];
+		this.vertices[0] = from;
+		this.vertices[1] = new Vector3f(from.x, from.y, to.z);
+		this.vertices[2] = new Vector3f(from.x, to.y, from.z);
+		this.vertices[3] = new Vector3f(to.x, from.y, from.z);
+		this.vertices[4] = new Vector3f(to.x, to.y, from.z);
+		this.vertices[5] = new Vector3f(to.x, from.y, to.z);
+		this.vertices[6] = new Vector3f(from.x, to.y, to.z);
+		this.vertices[7] = to;
 		this.faces = faces;
 	}
 
 	public Vector3f getFrom() {
-		return from;
+		return vertices[0];
 	}
 
 	public Vector3f getTo() {
-		return to;
+		return vertices[7];
 	}
 
 	public Map<Direction, FluidFace> getFaces() {
@@ -84,27 +86,18 @@ public class FluidCuboid {
 	}
 
 	/**
-	 * Gets fluid from, scaled for renderer
-	 * @return Scaled from
+	 * Gets fluid vertices, scaled for renderer
+	 * @return Scaled vertices
 	 */
-	public Vector3f getFromScaled() {
-		if (fromScaled == null) {
-			fromScaled = new Vector3f(from);
-			fromScaled.mul(1 / 16f);
+	public Vector3f[] getScaledVertices() {
+		if (scaledVertices == null) {
+			scaledVertices = new Vector3f[vertices.length];
+			for (int i = 0; i < vertices.length; ++i) {
+				scaledVertices[i] = new Vector3f(vertices[i]);
+				scaledVertices[i].mul(1 / 16f);
+			}
 		}
-		return fromScaled;
-	}
-
-	/**
-	 * Gets fluid to, scaled for renderer
-	 * @return Scaled from
-	 */
-	public Vector3f getToScaled() {
-		if (toScaled == null) {
-			toScaled = new Vector3f(to);
-			toScaled.mul(1 / 16f);
-		}
-		return toScaled;
+		return scaledVertices;
 	}
 
 	/**

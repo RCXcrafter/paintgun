@@ -74,39 +74,39 @@ public class FluidRenderer {
 	 * @param brightness  Face brightness
 	 * @param flowing     If true, half texture coordinates
 	 */
-	public static void putTexturedQuad(VertexConsumer renderer, PoseStack matrices, TextureAtlasSprite sprite, Vector3f from, Vector3f to, Direction face, int color, int brightness, int packedOverlay, int rotation, boolean flowing) {
+	public static void putTexturedQuad(VertexConsumer renderer, PoseStack matrices, TextureAtlasSprite sprite, Vector3f[] vertices, Direction face, int color, int brightness, int packedOverlay, int rotation, boolean flowing) {
 		Matrix4f matrix = matrices.last().pose();
 		Matrix3f normal = matrices.last().normal(); 
 		// start with texture coordinates
-		float x1 = from.x(), y1 = from.y(), z1 = from.z();
-		float x2 = to.x(), y2 = to.y(), z2 = to.z();
+		//float x1 = from.x(), y1 = from.y(), z1 = from.z();
+		//float x2 = to.x(), y2 = to.y(), z2 = to.z();
 		// choose UV based on the directions, some need to negate UV due to the direction
 		// note that we use -UV instead of 1-UV as its slightly simpler and the later logic deals with negatives
 		float u1, u2, v1, v2;
 		switch (face) {
 		default -> { // DOWN
-			u1 = x1; u2 = x2;
-			v1 = z2; v2 = z1;
+			u1 = vertices[0].x; u2 = vertices[5].x;
+			v1 = vertices[5].z; v2 = vertices[0].z;
 		}
 		case UP -> {
-			u1 = x1; u2 = x2;
-			v1 = -z1; v2 = -z2;
+			u1 = vertices[2].x; u2 = vertices[7].x;
+			v1 = -vertices[2].z; v2 = -vertices[7].z;
 		}
 		case NORTH -> {
-			u1 = -x1; u2 = -x2;
-			v1 = y1; v2 = y2;
+			u1 = -vertices[0].x; u2 = -vertices[4].x;
+			v1 = vertices[0].y; v2 = vertices[4].y;
 		}
 		case SOUTH -> {
-			u1 = x2; u2 = x1;
-			v1 = y1; v2 = y2;
+			u1 = vertices[7].x; u2 = vertices[1].x;
+			v1 = vertices[1].y; v2 = vertices[7].y;
 		}
 		case WEST -> {
-			u1 = z2; u2 = z1;
-			v1 = y1; v2 = y2;
+			u1 = vertices[6].z; u2 = vertices[0].z;
+			v1 = vertices[0].y; v2 = vertices[6].y;
 		}
 		case EAST -> {
-			u1 = -z1; u2 = -z2;
-			v1 = y1; v2 = y2;
+			u1 = -vertices[3].z; u2 = -vertices[7].z;
+			v1 = vertices[3].y; v2 = vertices[7].y;
 		}
 		}
 
@@ -182,40 +182,40 @@ public class FluidRenderer {
 		int b = color & 0xFF;
 		switch (face) {
 		case DOWN -> {
-			renderer.vertex(matrix, x1, y1, z2).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, -1, 0).endVertex();
-			renderer.vertex(matrix, x1, y1, z1).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, -1, 0).endVertex();
-			renderer.vertex(matrix, x2, y1, z1).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, -1, 0).endVertex();
-			renderer.vertex(matrix, x2, y1, z2).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, -1, 0).endVertex();
+			renderer.vertex(matrix, vertices[1].x, vertices[1].y, vertices[1].z).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, -1, 0).endVertex();
+			renderer.vertex(matrix, vertices[0].x, vertices[0].y, vertices[0].z).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, -1, 0).endVertex();
+			renderer.vertex(matrix, vertices[3].x, vertices[3].y, vertices[3].z).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, -1, 0).endVertex();
+			renderer.vertex(matrix, vertices[5].x, vertices[5].y, vertices[5].z).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, -1, 0).endVertex();
 		}
 		case UP -> {
-			renderer.vertex(matrix, x1, y2, z1).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 1, 0).endVertex();
-			renderer.vertex(matrix, x1, y2, z2).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 1, 0).endVertex();
-			renderer.vertex(matrix, x2, y2, z2).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 1, 0).endVertex();
-			renderer.vertex(matrix, x2, y2, z1).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 1, 0).endVertex();
+			renderer.vertex(matrix, vertices[2].x, vertices[2].y, vertices[2].z).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 1, 0).endVertex();
+			renderer.vertex(matrix, vertices[6].x, vertices[6].y, vertices[6].z).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 1, 0).endVertex();
+			renderer.vertex(matrix, vertices[7].x, vertices[7].y, vertices[7].z).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 1, 0).endVertex();
+			renderer.vertex(matrix, vertices[4].x, vertices[4].y, vertices[4].z).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 1, 0).endVertex();
 		}
 		case NORTH -> {
-			renderer.vertex(matrix, x1, y1, z1).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, -1).endVertex();
-			renderer.vertex(matrix, x1, y2, z1).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, -1).endVertex();
-			renderer.vertex(matrix, x2, y2, z1).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, -1).endVertex();
-			renderer.vertex(matrix, x2, y1, z1).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, -1).endVertex();
+			renderer.vertex(matrix, vertices[0].x, vertices[0].y, vertices[0].z).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, -1).endVertex();
+			renderer.vertex(matrix, vertices[2].x, vertices[2].y, vertices[2].z).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, -1).endVertex();
+			renderer.vertex(matrix, vertices[4].x, vertices[4].y, vertices[4].z).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, -1).endVertex();
+			renderer.vertex(matrix, vertices[3].x, vertices[3].y, vertices[3].z).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, -1).endVertex();
 		}
 		case SOUTH -> {
-			renderer.vertex(matrix, x2, y1, z2).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, 1).endVertex();
-			renderer.vertex(matrix, x2, y2, z2).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, 1).endVertex();
-			renderer.vertex(matrix, x1, y2, z2).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, 1).endVertex();
-			renderer.vertex(matrix, x1, y1, z2).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, 1).endVertex();
+			renderer.vertex(matrix, vertices[5].x, vertices[5].y, vertices[5].z).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, 1).endVertex();
+			renderer.vertex(matrix, vertices[7].x, vertices[7].y, vertices[7].z).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, 1).endVertex();
+			renderer.vertex(matrix, vertices[6].x, vertices[6].y, vertices[6].z).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, 1).endVertex();
+			renderer.vertex(matrix, vertices[1].x, vertices[1].y, vertices[1].z).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 0, 0, 1).endVertex();
 		}
 		case WEST -> {
-			renderer.vertex(matrix, x1, y1, z2).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, -1, 0, 0).endVertex();
-			renderer.vertex(matrix, x1, y2, z2).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, -1, 0, 0).endVertex();
-			renderer.vertex(matrix, x1, y2, z1).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, -1, 0, 0).endVertex();
-			renderer.vertex(matrix, x1, y1, z1).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, -1, 0, 0).endVertex();
+			renderer.vertex(matrix, vertices[1].x, vertices[1].y, vertices[1].z).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, -1, 0, 0).endVertex();
+			renderer.vertex(matrix, vertices[6].x, vertices[6].y, vertices[6].z).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, -1, 0, 0).endVertex();
+			renderer.vertex(matrix, vertices[2].x, vertices[2].y, vertices[2].z).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, -1, 0, 0).endVertex();
+			renderer.vertex(matrix, vertices[0].x, vertices[0].y, vertices[0].z).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, -1, 0, 0).endVertex();
 		}
 		case EAST -> {
-			renderer.vertex(matrix, x2, y1, z1).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 1, 0, 0).endVertex();
-			renderer.vertex(matrix, x2, y2, z1).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 1, 0, 0).endVertex();
-			renderer.vertex(matrix, x2, y2, z2).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 1, 0, 0).endVertex();
-			renderer.vertex(matrix, x2, y1, z2).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 1, 0, 0).endVertex();
+			renderer.vertex(matrix, vertices[3].x, vertices[3].y, vertices[3].z).color(r, g, b, a).uv(u1, v1).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 1, 0, 0).endVertex();
+			renderer.vertex(matrix, vertices[4].x, vertices[4].y, vertices[4].z).color(r, g, b, a).uv(u2, v2).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 1, 0, 0).endVertex();
+			renderer.vertex(matrix, vertices[7].x, vertices[7].y, vertices[7].z).color(r, g, b, a).uv(u3, v3).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 1, 0, 0).endVertex();
+			renderer.vertex(matrix, vertices[5].x, vertices[5].y, vertices[5].z).color(r, g, b, a).uv(u4, v4).overlayCoords(packedOverlay).uv2(light1, light2).normal(normal, 1, 0, 0).endVertex();
 		}
 		}
 	}
@@ -233,14 +233,14 @@ public class FluidRenderer {
 	 * @param light     Quad lighting
 	 * @param isGas     If true, fluid is a gas
 	 */
-	public static void renderCuboid(PoseStack matrices, VertexConsumer buffer, FluidCuboid cube, TextureAtlasSprite still, TextureAtlasSprite flowing, Vector3f from, Vector3f to, int color, int light, int packedOverlay, boolean isGas) {
+	public static void renderCuboid(PoseStack matrices, VertexConsumer buffer, FluidCuboid cube, TextureAtlasSprite still, TextureAtlasSprite flowing, Vector3f[] vertices, int color, int light, int packedOverlay, boolean isGas) {
 		int rotation = isGas ? 180 : 0;
 		for (Direction dir : Direction.values()) {
 			FluidFace face = cube.getFace(dir);
 			if (face != null) {
 				boolean isFlowing = face.isFlowing();
 				int faceRot = (rotation + face.rotation()) % 360;
-				putTexturedQuad(buffer, matrices, isFlowing ? flowing : still, from, to, dir, color, light, packedOverlay, faceRot, isFlowing);
+				putTexturedQuad(buffer, matrices, isFlowing ? flowing : still, vertices, dir, color, light, packedOverlay, faceRot, isFlowing);
 			}
 		}
 	}
@@ -269,7 +269,7 @@ public class FluidRenderer {
 
 		// render all given cuboids
 		for (FluidCuboid cube : cubes) {
-			renderCuboid(matrices, buffer, cube, still, flowing, cube.getFromScaled(), cube.getToScaled(), color, light, packedOverlay, isGas);
+			renderCuboid(matrices, buffer, cube, still, flowing, cube.getScaledVertices(), color, light, packedOverlay, isGas);
 		}
 	}
 
@@ -292,7 +292,7 @@ public class FluidRenderer {
 		int color = clientType.getTintColor();
 
 		// render the given cuboid
-		renderCuboid(matrices, buffer, cube, still, flowing, cube.getFromScaled(), cube.getToScaled(), color, light, packedOverlay, isGas);
+		renderCuboid(matrices, buffer, cube, still, flowing, cube.getScaledVertices(), color, light, packedOverlay, isGas);
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class FluidRenderer {
 			matrices.pushPose();
 			matrices.translate(0, yOffset, 0);
 		}
-		renderCuboid(matrices, buffer, cube, still, flowing, cube.getFromScaled(), cube.getToScaled(), color, light, packedOverlay, isGas);
+		renderCuboid(matrices, buffer, cube, still, flowing, cube.getScaledVertices(), color, light, packedOverlay, isGas);
 		if (yOffset != 0) {
 			matrices.popPose();
 		}
@@ -329,7 +329,7 @@ public class FluidRenderer {
 	 * @param cube      Fluid cuboid instance
 	 * @param flipGas   If true, flips gas cubes
 	 */
-	public static void renderScaledCuboid(PoseStack matrices, MultiBufferSource buffer, FluidCuboid cube, FluidStack fluid, float offset, int capacity, int light, int packedOverlay, boolean flipGas) {
+	/*public static void renderScaledCuboid(PoseStack matrices, MultiBufferSource buffer, FluidCuboid cube, FluidStack fluid, float offset, int capacity, int light, int packedOverlay, boolean flipGas) {
 		// nothing to render
 		if (fluid.isEmpty() || capacity <= 0) {
 			return;
@@ -360,5 +360,5 @@ public class FluidRenderer {
 
 		// draw cuboid
 		renderCuboid(matrices, buffer.getBuffer(PaintGunRenderTypes.FLUID), cube, still, flowing, from, to, clientType.getTintColor(fluid), light, packedOverlay, isGas && flipGas);
-	}
+	}*/
 }

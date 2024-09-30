@@ -25,13 +25,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class GelProjectileRenderer extends EntityRenderer<GelProjectile> {
 
-	public static Function<Integer, FluidCuboid> CUBOID = Util.memoize(size -> {
-		return new FluidCuboid(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(size, size, size), FluidCuboid.DEFAULT_FACES);
+	public static Function<Float, WobblyFluidCuboid> CUBOID = Util.memoize(size -> {
+		return new WobblyFluidCuboid(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(size, size, size), FluidCuboid.DEFAULT_FACES);
 	});
 
 	public GelProjectileRenderer(EntityRendererProvider.Context context) {
 		super(context);
 	}
+
+	float growTime = 4.0f;
+	float startSize = 0.3f;
 
 	@Override
 	public void render(GelProjectile entity, float pEntityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
@@ -43,17 +46,25 @@ public class GelProjectileRenderer extends EntityRenderer<GelProjectile> {
 		if (rendertype != null) {
 			VertexConsumer vertexconsumer = buffer.getBuffer(rendertype);
 			Random rand = new Random(entity.getId());
-			float age = entity.tickCount + partialTicks + rand.nextInt(100);
-			int size = entity.getSize() * 2 + 2;
+			float age = entity.tickCount + partialTicks;
+			float size = entity.getSize() * 2 + 2;
+
+			if (age < growTime) {
+				size *= age * (1 - startSize) / growTime + startSize;
+			}
+
 			poseStack.pushPose();
 
 			poseStack.translate(0, entity.getBbHeight() / 2.0, 0);
-			poseStack.mulPose(new Quaternionf().rotationX(age * (rand.nextFloat() - 0.5f)));
-			poseStack.mulPose(new Quaternionf().rotationY(age * (rand.nextFloat() - 0.5f)));
-			poseStack.mulPose(new Quaternionf().rotationZ(age * (rand.nextFloat() - 0.5f)));
+			poseStack.mulPose(new Quaternionf().rotationX(rand.nextFloat()));
+			poseStack.mulPose(new Quaternionf().rotationY(rand.nextFloat()));
+			poseStack.mulPose(new Quaternionf().rotationZ(rand.nextFloat()));
 			poseStack.translate(-size / 32.0, -size / 32.0, -size / 32.0);
 
-			FluidRenderer.renderCuboid(poseStack, vertexconsumer, CUBOID.apply(size), entity.getFluid(), packedLight, OverlayTexture.NO_OVERLAY);
+			WobblyFluidCuboid cuboid = CUBOID.apply(size);
+			cuboid.setWobbleTime(age, size / (16.0f * 6.0f), rand);
+
+			FluidRenderer.renderCuboid(poseStack, vertexconsumer, cuboid, entity.getFluid(), packedLight, OverlayTexture.NO_OVERLAY);
 			poseStack.popPose();
 		}
 	}
