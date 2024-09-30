@@ -79,7 +79,7 @@ public class PaintGunItem extends Item {
 			double posZ = player.getZ() + look.z + handmod * (player.getBbWidth() / 2.0) * Math.cos(Math.toRadians(-player.getYHeadRot() - 90));
 
 			GelProjectile ink = new GelProjectile(level, player, posX, posY - 0.1875f, posZ, gel, rand.nextInt(4) + 2);
-			ink.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.25F, 1.0F);
+			ink.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.95F, 1.0F);
 			level.addFreshEntity(ink);
 		}
 	}

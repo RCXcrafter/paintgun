@@ -243,6 +243,6 @@ public class GelProjectile extends Projectile {
 	}
 
 	public float getGravity() {
-		return 0.14F;
+		return 0.10F;
 	}
 }
