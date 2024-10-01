@@ -22,6 +22,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -79,6 +80,20 @@ public class GelProjectile extends Projectile {
 			this.refreshDimensions();
 		}
 		super.onSyncedDataUpdated(pKey);
+	}
+
+	@Override
+	protected void addAdditionalSaveData(CompoundTag nbt) {
+		super.addAdditionalSaveData(nbt);
+		nbt.putString("fluid", getEntityData().get(DATA_FLUID));
+		nbt.putInt("size", getEntityData().get(DATA_SIZE));
+	}
+
+	@Override
+	protected void readAdditionalSaveData(CompoundTag nbt) {
+		super.readAdditionalSaveData(nbt);
+		getEntityData().set(DATA_FLUID, nbt.getString("fluid"));
+		getEntityData().set(DATA_SIZE, nbt.getInt("size"));
 	}
 
 	@Override
