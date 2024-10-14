@@ -3,16 +3,21 @@ package com.rcx.paintgun.item;
 import java.util.Random;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.rcx.paintgun.PaintGunResources.FluidStuff;
 import com.rcx.paintgun.datagen.PaintGunSounds;
 import com.rcx.paintgun.entity.GelProjectile;
+import com.rcx.paintgun.misc.IMultiTankFluidHandler;
+import com.rcx.paintgun.misc.MultiTankFluidHandlerItem;
 import com.rcx.paintgun.network.MessageGunFire;
 import com.rcx.paintgun.network.PacketHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -23,9 +28,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class PaintGunItem extends Item {
 
@@ -67,16 +78,20 @@ public class PaintGunItem extends Item {
 					PacketHandler.INSTANCE.sendToServer(new MessageGunFire(useDown, attackDown));
 				}
 			} else {
-				if (secondaryFire) {
-					this.shootGel(level, living, stack, offhandShot, secondaryFluid.FLUID.get());
-				} else if (primaryFire) {
-					this.shootGel(level, living, stack, offhandShot, primaryFluid.FLUID.get());
+				LazyOptional<IFluidHandlerItem> cap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
+				if (cap.isPresent() && cap.orElse(null) instanceof IMultiTankFluidHandler multiTank) {
+					int size = rand.nextInt(4) + 2;
+					if (secondaryFire) {
+						this.shootGel(level, living, stack, offhandShot, multiTank.drain(1, size, FluidAction.EXECUTE));
+					} else if (primaryFire) {
+						this.shootGel(level, living, stack, offhandShot, multiTank.drain(1, size, FluidAction.EXECUTE));
+					}
 				}
 			}
 		}
 	}
 
-	public void shootGel(Level level, LivingEntity player, ItemStack stack, boolean offhand, Fluid gel) {
+	public void shootGel(Level level, LivingEntity player, ItemStack stack, boolean offhand, FluidStack gel) {
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), PaintGunSounds.GEL_SHOOT.get(), SoundSource.PLAYERS, 0.4F, 1.4F + level.getRandom().nextFloat() * 0.2F);
 		if (!level.isClientSide) {
 			double handmod = offhand ? -1.0 : 1.0;
@@ -86,7 +101,7 @@ public class PaintGunItem extends Item {
 			double posY = player.getY() + player.getEyeHeight() + look.y;
 			double posZ = player.getZ() + look.z + handmod * (player.getBbWidth() / 2.0) * Math.cos(Math.toRadians(-player.getYHeadRot() - 90));
 
-			GelProjectile ink = new GelProjectile(level, player, posX, posY - 0.1875f, posZ, gel, rand.nextInt(4) + 2);
+			GelProjectile ink = new GelProjectile(level, player, posX, posY - 0.1875f, posZ, gel.getFluid(), gel.getAmount());
 			ink.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.95F, 1.0F);
 			level.addFreshEntity(ink);
 		}
@@ -98,6 +113,12 @@ public class PaintGunItem extends Item {
 		return level.isClientSide() ? InteractionResultHolder.fail(stack) : InteractionResultHolder.consume(stack);
 	}
 
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+		return new MultiTankFluidHandlerItem(stack, 2, FluidType.BUCKET_VOLUME);
+	}
+
+	@Override
 	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 		consumer.accept(new IClientItemExtensions() {
 			@Override
